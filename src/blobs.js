@@ -17,8 +17,10 @@ class BlobsPainter {
   }
   static get inputProperties() {
     return [
-      "--extra-points",
-      "--randomness",
+      "--min-extra-points",
+      "--max-extra-points",
+      "--min-randomness",
+      "--max-randomness",
       "--min-size",
       "--max-size",
       "--num-blobs",
@@ -29,17 +31,7 @@ class BlobsPainter {
     ];
   }
   parseProps(props) {
-    return [
-      "--extra-points",
-      "--randomness",
-      "--min-size",
-      "--max-size",
-      "--num-blobs",
-      "--colors",
-      "--min-opacity",
-      "--max-opacity",
-      "--seed",
-    ].map((propName) => {
+    return this.constructor.inputProperties.map((propName) => {
       const prop = props.get(propName);
 
       // Cater for browsers that don't speak CSS Typed OM and
@@ -53,8 +45,10 @@ class BlobsPainter {
         }
 
         switch (propName) {
-          case "--extra-points":
-          case "--randomness":
+          case "--min-extra-points":
+          case "--max-extra-points":
+          case "--min-randomness":
+          case "--max-randomness":
           case "--min-size":
           case "--max-size":
           case "--num-blobs":
@@ -101,8 +95,10 @@ class BlobsPainter {
   paint(ctx, geom, props) {
     const { width: w, height: h } = geom;
     const [
-      extraPoints = 1,
-      randomness = 20,
+      minExtraPoints = 1,
+      maxExtraPoints = 1,
+      minRandomness = 20,
+      maxRandomness = 20,
       minSize = 20,
       maxSize = 400,
       numBlobs = 5,
@@ -112,7 +108,6 @@ class BlobsPainter {
       seed = 123,
     ] = this.parseProps(props);
 
-    console.log(this.parseProps(props));
     this.getRandom = mulberry32(seed);
 
     ctx.clearRect(0, 0, w, h);
@@ -120,8 +115,8 @@ class BlobsPainter {
       const path = blobs2.canvasPath(
         {
           seed: this.getRandom(),
-          extraPoints: extraPoints,
-          randomness: randomness,
+          extraPoints: this.rand(minExtraPoints, maxExtraPoints),
+          randomness: this.rand(minRandomness, maxRandomness),
           size: this.rand(minSize, maxSize),
         },
         {

@@ -1645,25 +1645,17 @@ var BlobsPainter1 = /*#__PURE__*/ function() {
         {
             key: "parseProps",
             value: function parseProps(props) {
-                return [
-                    "--extra-points",
-                    "--randomness",
-                    "--min-size",
-                    "--max-size",
-                    "--num-blobs",
-                    "--colors",
-                    "--min-opacity",
-                    "--max-opacity",
-                    "--seed", 
-                ].map(function(propName) {
+                return this.constructor.inputProperties.map(function(propName) {
                     var prop1 = props.get(propName);
                     // Cater for browsers that don't speak CSS Typed OM and
                     // for browsers that do speak it, but haven't registered the props
                     if (typeof CSSUnparsedValue === "undefined" || _instanceof(prop1, CSSUnparsedValue)) {
                         if (!prop1.length || prop1 === "") return undefined;
                         switch(propName){
-                            case "--extra-points":
-                            case "--randomness":
+                            case "--min-extra-points":
+                            case "--max-extra-points":
+                            case "--min-randomness":
+                            case "--max-randomness":
                             case "--min-size":
                             case "--max-size":
                             case "--num-blobs":
@@ -1701,19 +1693,18 @@ var BlobsPainter1 = /*#__PURE__*/ function() {
             key: "paint",
             value: function paint(ctx, geom, props) {
                 var w = geom.width, h = geom.height;
-                var ref = _slicedToArray(this.parseProps(props), 9), tmp = ref[0], extraPoints = tmp === void 0 ? 1 : tmp, tmp1 = ref[1], randomness = tmp1 === void 0 ? 20 : tmp1, tmp2 = ref[2], minSize = tmp2 === void 0 ? 20 : tmp2, tmp3 = ref[3], maxSize = tmp3 === void 0 ? 400 : tmp3, tmp4 = ref[4], numBlobs = tmp4 === void 0 ? 5 : tmp4, tmp5 = ref[5], colors = tmp5 === void 0 ? [
+                var ref = _slicedToArray(this.parseProps(props), 11), tmp = ref[0], minExtraPoints = tmp === void 0 ? 1 : tmp, tmp1 = ref[1], maxExtraPoints = tmp1 === void 0 ? 1 : tmp1, tmp2 = ref[2], minRandomness = tmp2 === void 0 ? 20 : tmp2, tmp3 = ref[3], maxRandomness = tmp3 === void 0 ? 20 : tmp3, tmp4 = ref[4], minSize = tmp4 === void 0 ? 20 : tmp4, tmp5 = ref[5], maxSize = tmp5 === void 0 ? 400 : tmp5, tmp6 = ref[6], numBlobs = tmp6 === void 0 ? 5 : tmp6, tmp7 = ref[7], colors = tmp7 === void 0 ? [
                     "#71a7ee",
                     "#7940c1"
-                ] : tmp5, tmp6 = ref[6], minOpacity = tmp6 === void 0 ? 0.5 : tmp6, tmp7 = ref[7], maxOpacity = tmp7 === void 0 ? 1 : tmp7, tmp8 = ref[8], seed = tmp8 === void 0 ? 123 : tmp8;
-                console.log(this.parseProps(props));
+                ] : tmp7, tmp8 = ref[8], minOpacity = tmp8 === void 0 ? 0.5 : tmp8, tmp9 = ref[9], maxOpacity = tmp9 === void 0 ? 1 : tmp9, tmp10 = ref[10], seed = tmp10 === void 0 ? 123 : tmp10;
                 this.getRandom = mulberry32(seed);
                 ctx.clearRect(0, 0, w, h);
                 for(var i = 0, max = numBlobs; i < max; i++){
                     var ref1;
                     var path = blobs2.canvasPath({
                         seed: this.getRandom(),
-                        extraPoints: extraPoints,
-                        randomness: randomness,
+                        extraPoints: this.rand(minExtraPoints, maxExtraPoints),
+                        randomness: this.rand(minRandomness, maxRandomness),
                         size: this.rand(minSize, maxSize)
                     }, {
                         offsetX: this.rand(0, w),
@@ -1740,8 +1731,10 @@ var BlobsPainter1 = /*#__PURE__*/ function() {
             key: "inputProperties",
             get: function get() {
                 return [
-                    "--extra-points",
-                    "--randomness",
+                    "--min-extra-points",
+                    "--max-extra-points",
+                    "--min-randomness",
+                    "--max-randomness",
                     "--min-size",
                     "--max-size",
                     "--num-blobs",

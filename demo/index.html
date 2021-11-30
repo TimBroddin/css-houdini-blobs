@@ -27,8 +27,10 @@
         CSS.paintWorklet.addModule("./js/blobs.js");
 
         const config = {
-          extraPoints: 0,
-          randomness: 50,
+          minExtraPoints: 0,
+          maxExtraPoints: 1,
+          minRandomness: 50,
+          maxRandomness: 50,
           minSize: 20,
           maxSize: 200,
           seed: 1234,
@@ -44,8 +46,10 @@
         const update = () => {
           const style = document.querySelector(".css-houdini.blobs").style;
 
-          style.setProperty("--extra-points", config.extraPoints);
-          style.setProperty("--randomness", config.randomness);
+          style.setProperty("--min-extra-points", config.minExtraPoints);
+          style.setProperty("--max-extra-points", config.maxExtraPoints);
+          style.setProperty("--min-randomness", config.minRandomness);
+          style.setProperty("--max-randomness", config.maxRandomness);
           style.setProperty("--min-size", config.minSize);
           style.setProperty("--max-size", config.maxSize);
           style.setProperty("--num-blobs", config.numBlobs);
@@ -61,8 +65,10 @@
             <pre>
               <code>
                 &lt;style&gt;
-                --extra-points: ${config.extraPoints};
-                --randomness: ${config.randomness};
+                --min-extra-points: ${config.minExtraPoints};
+                --max-extra-points: ${config.maxExtraPoints};
+                --min-randomness: ${config.minRandomness};
+                --max-randomness: ${config.maxrandomness};
                 --min-size: ${config.minSize};
                 --max-size: ${config.maxSize};
                 --num-blobs: ${config.numBlobs};
@@ -78,8 +84,32 @@
         update();
 
         const gui = new dat.GUI();
-        gui.add(config, "extraPoints").min(0).max(10).step(1).onChange(update);
-        gui.add(config, "randomness").min(0).max(100).step(1).onChange(update);
+        gui
+          .add(config, "minExtraPoints")
+          .min(0)
+          .max(10)
+          .step(1)
+          .onChange(update);
+        gui
+          .add(config, "maxExtraPoints")
+          .min(0)
+          .max(10)
+          .step(1)
+          .onChange(update);
+
+        gui
+          .add(config, "minRandomness")
+          .min(0)
+          .max(100)
+          .step(1)
+          .onChange(update);
+        gui
+          .add(config, "maxRandomness")
+          .min(0)
+          .max(100)
+          .step(1)
+          .onChange(update);
+
         gui.add(config, "minSize").min(0).max(1000).step(1).onChange(update);
         gui.add(config, "maxSize").min(0).max(1000).step(1).onChange(update);
         gui.add(config, "seed").min(0).max(10000).step(1).onChange(update);
