@@ -32,10 +32,13 @@
           minSize: 20,
           maxSize: 200,
           seed: 1234,
+          numBlobs: 20,
+
           color1: "#71a7ee",
           color2: "#7940c1",
           color3: "#f0e891",
-          numCircles: 20,
+          minOpacity: 0.1,
+          maxOpacity: 0.5,
         };
 
         const update = () => {
@@ -45,12 +48,14 @@
           style.setProperty("--randomness", config.randomness);
           style.setProperty("--min-size", config.minSize);
           style.setProperty("--max-size", config.maxSize);
+          style.setProperty("--num-blobs", config.numBlobs);
           style.setProperty("--seed", config.seed);
-          style.setProperty("--num-circles", config.numCircles);
           style.setProperty(
             "--colors",
             `${config.color1}, ${config.color2}, ${config.color3}`
           );
+          style.setProperty("--min-opacity", config.minOpacity);
+          style.setProperty("--max-opacity", config.maxOpacity);
 
           document.querySelector("code").innerHTML = `
             <pre>
@@ -60,9 +65,11 @@
                 --randomness: ${config.randomness};
                 --min-size: ${config.minSize};
                 --max-size: ${config.maxSize};
+                --num-blobs: ${config.numBlobs};
                 --seed: ${config.seed};
-                --num-circles: ${config.numCircles};
                 --colors: ${config.color1}, ${config.color2}, ${config.color3};
+                --min-opacity: ${config.minOpacity};
+                --max-opacity: ${config.maxOpacity};
                 &lt;/style&gt;
               </code>
             </pre>`;
@@ -76,10 +83,13 @@
         gui.add(config, "minSize").min(0).max(1000).step(1).onChange(update);
         gui.add(config, "maxSize").min(0).max(1000).step(1).onChange(update);
         gui.add(config, "seed").min(0).max(10000).step(1).onChange(update);
-        gui.add(config, "numCircles").min(0).max(40).step(1).onChange(update);
+        gui.add(config, "numBlobs").min(0).max(40).step(1).onChange(update);
+
         gui.addColor(config, "color1").onChange(update);
         gui.addColor(config, "color2").onChange(update);
         gui.addColor(config, "color3").onChange(update);
+        gui.add(config, "minOpacity").min(0).max(1).step(0.01).onChange(update);
+        gui.add(config, "maxOpacity").min(0).max(1).step(0.01).onChange(update);
       })();
     </script>
   </body>

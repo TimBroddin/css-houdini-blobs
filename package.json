@@ -8,7 +8,7 @@
     "build": "npx spack",
     "prepublish": "npm run build",
     "predemo": "npm run build",
-    "demo": "node ./server.js",
+    "demo": "rm -rf demo/js && node ./server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "packdemo": "npm run build && mkdir demo/js && cp dist/blobs.js demo/js"
   },
@@ -45,6 +45,7 @@
   },
   "dependencies": {
     "blobs": "^2.2.1-beta.1",
-    "blobshape": "^1.0.0"
+    "blobshape": "^1.0.0",
+    "parse-color": "^1.0.0"
   }
 }
