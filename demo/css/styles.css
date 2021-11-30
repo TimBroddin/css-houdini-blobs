@@ -39,3 +39,16 @@ body {
 .blobs {
     background-image: paint(blobs);
 }
+
+#modal {
+
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    border-radius: 2rem;
+    backdrop-filter: blur(2px);
+    padding: 2rem;
+    color: white;
+}
