@@ -5,10 +5,10 @@
   "source": "src/index.js",
   "main": "dist/blobs.js",
   "scripts": {
-    "build": "npx spack",
+    "build": "npx spack; cp dist/blobs.js demo/js/blobs.js",
     "prepublish": "npm run build",
     "predemo": "npm run build",
-    "demo": "rm -rf demo/js && node ./server.js",
+    "demo": "serve demo",
     "test": "echo \"Error: no test specified\" && exit 1",
     "packdemo": "npm run build && mkdir demo/js && cp dist/blobs.js demo/js"
   },
@@ -41,7 +41,8 @@
   "devDependencies": {
     "@swc/cli": "^0.1.51",
     "@swc/core": "^1.2.107",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "serve": "^13.0.2"
   },
   "dependencies": {
     "blobs": "^2.2.1-beta.1",
