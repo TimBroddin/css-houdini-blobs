@@ -1,0 +1,50 @@
+{
+  "name": "css-houdini-blobs",
+  "version": "1.0.0",
+  "description": "CSS Houdini Background Blobs",
+  "source": "src/index.js",
+  "main": "dist/blobs.js",
+  "scripts": {
+    "build": "npx spack",
+    "prepublish": "npm run build",
+    "predemo": "npm run build",
+    "demo": "node ./server.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "packdemo": "npm run build && mkdir demo/js && cp dist/blobs.js demo/js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/timbroddin/css-houdini-blobs.git"
+  },
+  "keywords": [
+    "houdini",
+    "css-houdini",
+    "css",
+    "paintworklet",
+    "paint",
+    "worklet",
+    "background",
+    "blob",
+    "blobs"
+  ],
+  "author": {
+    "name": "Tim Broddin",
+    "email": "tim@broddin.be",
+    "twitter": "@timbroddin",
+    "web": "https://www.broddin.be/"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/timbroddin/css-houdini-blobs/issues"
+  },
+  "homepage": "https://github.com/timbroddin/css-houdini-blobs#readme",
+  "devDependencies": {
+    "@swc/cli": "^0.1.51",
+    "@swc/core": "^1.2.107",
+    "express": "^4.17.1"
+  },
+  "dependencies": {
+    "blobs": "^2.2.1-beta.1",
+    "blobshape": "^1.0.0"
+  }
+}

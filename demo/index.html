@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Houdini Blobs PaintWorklet</title>
+    <link rel="stylesheet" href="./css/styles.css" />
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.7/dat.gui.min.js"
+      integrity="sha512-LF8ZB1iTwi4Qvkm4pekHG4a437Y9Af5ZuwbnW4GTbAWQeR2E4KW8WF+xH8b9psevV7wIlDMx1MH9YfPqgKhA/Q=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+  </head>
+  <body>
+    <h1>Houdini Blobs PaintWorklet</h1>
+    <div class="css-houdini blobs"></div>
+    <code> </code>
+
+    <script>
+      (async function () {
+        if (CSS["paintWorklet"] === undefined) {
+          await import("https://unpkg.com/css-paint-polyfill");
+        }
+
+        CSS.paintWorklet.addModule("./js/blobs.js");
+
+        const config = {
+          extraPoints: 0,
+          randomness: 50,
+          minSize: 20,
+          maxSize: 200,
+          seed: 1234,
+          color1: "#71a7ee",
+          color2: "#7940c1",
+          color3: "#f0e891",
+          numCircles: 20,
+        };
+
+        const update = () => {
+          const style = document.querySelector(".css-houdini.blobs").style;
+
+          style.setProperty("--extra-points", config.extraPoints);
+          style.setProperty("--randomness", config.randomness);
+          style.setProperty("--min-size", config.minSize);
+          style.setProperty("--max-size", config.maxSize);
+          style.setProperty("--seed", config.seed);
+          style.setProperty("--num-circles", config.numCircles);
+          style.setProperty(
+            "--colors",
+            `${config.color1}, ${config.color2}, ${config.color3}`
+          );
+
+          document.querySelector("code").innerHTML = `
+            <pre>
+              <code>
+                &lt;style&gt;
+                --extra-points: ${config.extraPoints};
+                --randomness: ${config.randomness};
+                --min-size: ${config.minSize};
+                --max-size: ${config.maxSize};
+                --seed: ${config.seed};
+                --num-circles: ${config.numCircles};
+                --colors: ${config.color1}, ${config.color2}, ${config.color3};
+                &lt;/style&gt;
+              </code>
+            </pre>`;
+        };
+
+        update();
+
+        const gui = new dat.GUI();
+        gui.add(config, "extraPoints").min(0).max(10).step(1).onChange(update);
+        gui.add(config, "randomness").min(0).max(100).step(1).onChange(update);
+        gui.add(config, "minSize").min(0).max(1000).step(1).onChange(update);
+        gui.add(config, "maxSize").min(0).max(1000).step(1).onChange(update);
+        gui.add(config, "seed").min(0).max(10000).step(1).onChange(update);
+        gui.add(config, "numCircles").min(0).max(40).step(1).onChange(update);
+        gui.addColor(config, "color1").onChange(update);
+        gui.addColor(config, "color2").onChange(update);
+        gui.addColor(config, "color3").onChange(update);
+      })();
+    </script>
+  </body>
+</html>
