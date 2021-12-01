@@ -14,13 +14,17 @@
     ></script>
   </head>
   <body>
-    <div id="modal">
+    <div id="content">
       <h1>Houdini Blobs PaintWorklet</h1>
+      <div class="github">
+        <a href="https://github.com/timbroddin/css-houdini-blobs"
+          >View on Github</a
+        >
+      </div>
       <code> </code>
+
+      <div class="css-houdini-blobs"></div>
     </div>
-
-    <div class="css-houdini blobs"></div>
-
     <script>
       (async function () {
         if (CSS["paintWorklet"] === undefined) {
@@ -44,10 +48,12 @@
           color3: "#f0e891",
           minOpacity: 0.1,
           maxOpacity: 0.5,
+          offsetX: 0,
+          offsetY: 0,
         };
 
         const update = () => {
-          const style = document.querySelector(".css-houdini.blobs").style;
+          const style = document.querySelector(".css-houdini-blobs").style;
 
           style.setProperty("--min-extra-points", config.minExtraPoints);
           style.setProperty("--max-extra-points", config.maxExtraPoints);
@@ -56,6 +62,8 @@
           style.setProperty("--min-size", config.minSize);
           style.setProperty("--max-size", config.maxSize);
           style.setProperty("--num-blobs", config.numBlobs);
+          style.setProperty("--offset-x", config.offsetX);
+          style.setProperty("--offset-y", config.offsetY);
           style.setProperty("--seed", config.seed);
           style.setProperty(
             "--colors",
@@ -68,17 +76,23 @@
             <pre>
               <code>
                 &lt;style&gt;
-                --min-extra-points: ${config.minExtraPoints};
-                --max-extra-points: ${config.maxExtraPoints};
-                --min-randomness: ${config.minRandomness};
-                --max-randomness: ${config.maxrandomness};
-                --min-size: ${config.minSize};
-                --max-size: ${config.maxSize};
-                --num-blobs: ${config.numBlobs};
-                --seed: ${config.seed};
-                --colors: ${config.color1}, ${config.color2}, ${config.color3};
-                --min-opacity: ${config.minOpacity};
-                --max-opacity: ${config.maxOpacity};
+                .css-houdini-blobs {
+                  --min-extra-points: ${config.minExtraPoints};
+                  --max-extra-points: ${config.maxExtraPoints};
+                  --min-randomness: ${config.minRandomness};
+                  --max-randomness: ${config.maxRandomness};
+                  --min-size: ${config.minSize};
+                  --max-size: ${config.maxSize};
+                  --num-blobs: ${config.numBlobs};
+                  --offset-x: ${config.offsetX};
+                  --offset-y: ${config.offsetY};
+
+                  --seed: ${config.seed};
+                  --colors: ${config.color1}, ${config.color2}, ${config.color3};
+                  --min-opacity: ${config.minOpacity};
+                  --max-opacity: ${config.maxOpacity};
+                  background: paint(blobs);
+                }
                 &lt;/style&gt;
               </code>
             </pre>`;
@@ -117,6 +131,18 @@
         gui.add(config, "maxSize").min(0).max(1000).step(1).onChange(update);
         gui.add(config, "seed").min(0).max(10000).step(1).onChange(update);
         gui.add(config, "numBlobs").min(0).max(40).step(1).onChange(update);
+        gui
+          .add(config, "offsetX")
+          .min(-1000)
+          .max(1000)
+          .step(1)
+          .onChange(update);
+        gui
+          .add(config, "offsetY")
+          .min(-1000)
+          .max(1000)
+          .step(1)
+          .onChange(update);
 
         gui.addColor(config, "color1").onChange(update);
         gui.addColor(config, "color2").onChange(update);
@@ -125,5 +151,6 @@
         gui.add(config, "maxOpacity").min(0).max(1).step(0.01).onChange(update);
       })();
     </script>
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
   </body>
 </html>

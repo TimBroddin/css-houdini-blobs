@@ -27,89 +27,93 @@ class BlobsPainter {
       "--colors",
       "--min-opacity",
       "--max-opacity",
+      "--offset-x",
+      "--offset-y",
       "--seed",
     ];
   }
-  parseProps(props) {
-    return this.constructor.inputProperties.map((propName) => {
-      const prop = props.get(propName);
 
-      // Cater for browsers that don't speak CSS Typed OM and
-      // for browsers that do speak it, but haven't registered the props
-      if (
-        typeof CSSUnparsedValue === "undefined" ||
-        prop instanceof CSSUnparsedValue
-      ) {
-        if (!prop.length || prop === "") {
-          return undefined;
-        }
-
-        switch (propName) {
-          case "--min-extra-points":
-          case "--max-extra-points":
-          case "--min-randomness":
-          case "--max-randomness":
-          case "--min-size":
-          case "--max-size":
-          case "--num-blobs":
-          case "--seed":
-            return parseInt(prop.toString());
-          case "--min-opacity":
-          case "--max-opacity":
-            return parseFloat(prop.toString());
-          case "--colors":
-            return prop
-              .toString()
-              .split(",")
-              .map((color) => color.trim());
-
-          default:
-            return prop.toString().trim();
-        }
-      }
-
-      // Prop is not typed using @property (UnparsedValue) and not set either
-      // ~> Return undefined so that we can fall back to the default value during destructuring
-      if (prop instanceof CSSUnparsedValue && !prop.length) {
-        return undefined;
-      }
-
-      // Prop is a UnitValue (Number, Percentage, Integer, …)
-      // ~> Return the value
-      if (prop instanceof CSSUnitValue) {
-        return prop.value;
-      }
-
-      // Special case: cell colors
-      // We need to get each value using props.getAll();
-      if (propName === "--colors") {
-        return props.getAll(propName).map((prop) => prop.toString().trim());
-      }
-
-      // All others (such as CSSKeywordValue)
-      //~> Return the string
-      return prop.toString().trim();
+  propToVar(propName) {
+    return propName.substr(2).replace(/-([a-z])/g, function (g) {
+      return g[1].toUpperCase();
     });
+  }
+
+  parseProps(props) {
+    const parsed = {};
+
+    this.constructor.inputProperties.forEach((propName) => {
+      parsed[this.propToVar(propName)] = this.parseProp(propName, props);
+    });
+
+    return parsed;
+  }
+
+  parseProp(propName, props) {
+    const prop = props.get(propName);
+
+    switch (propName) {
+      case "--min-extra-points":
+      case "--max-extra-points":
+      case "--min-randomness":
+      case "--max-randomness":
+      case "--min-size":
+      case "--max-size":
+      case "--num-blobs":
+      case "--offset-x":
+      case "--offset-y":
+      case "--seed":
+        return parseInt(prop.toString());
+      case "--min-opacity":
+      case "--max-opacity":
+        return parseFloat(prop.toString());
+      case "--colors":
+        return prop
+          .toString()
+          .split(",")
+          .map((color) => color.trim());
+
+      default:
+        return prop.toString().trim();
+    }
   }
 
   paint(ctx, geom, props) {
     const { width: w, height: h } = geom;
-    const [
-      minExtraPoints = 1,
-      maxExtraPoints = 1,
-      minRandomness = 20,
-      maxRandomness = 20,
-      minSize = 20,
-      maxSize = 400,
-      numBlobs = 5,
-      colors = ["#71a7ee", "#7940c1"],
-      minOpacity = 0.5,
-      maxOpacity = 1,
-      seed = 123,
-    ] = this.parseProps(props);
+
+    const defaultProps = {
+      minExtraPoints: 1,
+      maxExtraPoints: 1,
+      minRandomness: 20,
+      maxRandomness: 20,
+      minSize: 20,
+      maxSize: 400,
+      numBlobs: 5,
+      colors: ["#71a7ee", "#7940c1"],
+      minOpacity: 0.5,
+      maxOpacity: 1,
+      offsetX: 0,
+      offsetY: 0,
+      seed: 123,
+    };
+
+    const {
+      minExtraPoints,
+      maxExtraPoints,
+      minRandomness,
+      maxRandomness,
+      minSize,
+      maxSize,
+      numBlobs,
+      offsetX,
+      offsetY,
+      colors,
+      minOpacity,
+      maxOpacity,
+      seed,
+    } = { ...defaultProps, ...this.parseProps(props) };
 
     this.getRandom = mulberry32(seed);
-
     ctx.clearRect(0, 0, w, h);
     for (let i = 0, max = numBlobs; i < max; i++) {
       const path = blobs2.canvasPath(
@@ -120,19 +124,17 @@ class BlobsPainter {
           size: this.rand(minSize, maxSize),
         },
         {
-          offsetX: this.rand(0, w),
-          offsetY: this.rand(0, h),
+          offsetX: this.rand(0 + offsetX, w),
+          offsetY: this.rand(0 + offsetY, h),
         }
       );
       const color = parse(colors[this.rand(0, colors.length - 1)])?.rgba;
 
       if (color) {
-        console.log(minOpacity * 100, maxOpacity * 100);
         ctx.fillStyle = `rgba(${color[0]}, ${color[1]}, ${color[2]}, ${
           this.rand(minOpacity * 100, maxOpacity * 100) / 100
         })`;
       }
-      console.log(ctx.fillStyle);
       ctx.fill(path);
     }
   }

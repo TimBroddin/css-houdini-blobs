@@ -41,12 +41,10 @@
   "devDependencies": {
     "@swc/cli": "^0.1.51",
     "@swc/core": "^1.2.107",
-    "express": "^4.17.1",
     "serve": "^13.0.2"
   },
   "dependencies": {
     "blobs": "^2.2.1-beta.1",
-    "blobshape": "^1.0.0",
     "parse-color": "^1.0.0"
   }
 }

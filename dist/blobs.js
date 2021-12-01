@@ -11,9 +11,6 @@ function __swcpack_require__(mod) {
     cache = module.exports;
     return cache;
 }
-function _arrayWithHoles(arr) {
-    if (Array.isArray(arr)) return arr;
-}
 function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
         throw new TypeError("Cannot call a class as a function");
@@ -33,40 +30,34 @@ function _createClass(Constructor, protoProps, staticProps) {
     if (staticProps) _defineProperties(Constructor, staticProps);
     return Constructor;
 }
-function _instanceof(left, right) {
-    if (right != null && typeof Symbol !== "undefined" && right[Symbol.hasInstance]) {
-        return right[Symbol.hasInstance](left);
+function _defineProperty(obj, key, value) {
+    if (key in obj) {
+        Object.defineProperty(obj, key, {
+            value: value,
+            enumerable: true,
+            configurable: true,
+            writable: true
+        });
     } else {
-        return left instanceof right;
+        obj[key] = value;
     }
+    return obj;
 }
-function _iterableToArrayLimit(arr, i) {
-    var _arr = [];
-    var _n = true;
-    var _d = false;
-    var _e = undefined;
-    try {
-        for(var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true){
-            _arr.push(_s.value);
-            if (i && _arr.length === i) break;
+function _objectSpread(target) {
+    for(var i = 1; i < arguments.length; i++){
+        var source = arguments[i] != null ? arguments[i] : {
+        };
+        var ownKeys = Object.keys(source);
+        if (typeof Object.getOwnPropertySymbols === "function") {
+            ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function(sym) {
+                return Object.getOwnPropertyDescriptor(source, sym).enumerable;
+            }));
         }
-    } catch (err) {
-        _d = true;
-        _e = err;
-    } finally{
-        try {
-            if (!_n && _i["return"] != null) _i["return"]();
-        } finally{
-            if (_d) throw _e;
-        }
+        ownKeys.forEach(function(key) {
+            _defineProperty(target, key, source[key]);
+        });
     }
-    return _arr;
-}
-function _nonIterableRest() {
-    throw new TypeError("Invalid attempt to destructure non-iterable instance");
-}
-function _slicedToArray(arr, i) {
-    return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest();
+    return target;
 }
 var load = __swcpack_require__.bind(void 0, function(module, exports) {
     !function(n, t) {
@@ -1643,60 +1634,77 @@ var BlobsPainter1 = /*#__PURE__*/ function() {
     }
     _createClass(BlobsPainter, [
         {
+            key: "propToVar",
+            value: function propToVar(propName) {
+                return propName.substr(2).replace(/-([a-z])/g, function(g) {
+                    return g[1].toUpperCase();
+                });
+            }
+        },
+        {
             key: "parseProps",
             value: function parseProps(props) {
-                return this.constructor.inputProperties.map(function(propName) {
-                    var prop1 = props.get(propName);
-                    // Cater for browsers that don't speak CSS Typed OM and
-                    // for browsers that do speak it, but haven't registered the props
-                    if (typeof CSSUnparsedValue === "undefined" || _instanceof(prop1, CSSUnparsedValue)) {
-                        if (!prop1.length || prop1 === "") return undefined;
-                        switch(propName){
-                            case "--min-extra-points":
-                            case "--max-extra-points":
-                            case "--min-randomness":
-                            case "--max-randomness":
-                            case "--min-size":
-                            case "--max-size":
-                            case "--num-blobs":
-                            case "--seed":
-                                return parseInt(prop1.toString());
-                            case "--min-opacity":
-                            case "--max-opacity":
-                                return parseFloat(prop1.toString());
-                            case "--colors":
-                                return prop1.toString().split(",").map(function(color) {
-                                    return color.trim();
-                                });
-                            default:
-                                return prop1.toString().trim();
-                        }
-                    }
-                    // Prop is not typed using @property (UnparsedValue) and not set either
-                    // ~> Return undefined so that we can fall back to the default value during destructuring
-                    if (_instanceof(prop1, CSSUnparsedValue) && !prop1.length) return undefined;
-                    // Prop is a UnitValue (Number, Percentage, Integer, …)
-                    // ~> Return the value
-                    if (_instanceof(prop1, CSSUnitValue)) return prop1.value;
-                    // Special case: cell colors
-                    // We need to get each value using props.getAll();
-                    if (propName === "--colors") return props.getAll(propName).map(function(prop) {
-                        return prop.toString().trim();
-                    });
-                    // All others (such as CSSKeywordValue)
-                    //~> Return the string
-                    return prop1.toString().trim();
+                var _this = this;
+                var parsed = {
+                };
+                this.constructor.inputProperties.forEach(function(propName) {
+                    parsed[_this.propToVar(propName)] = _this.parseProp(propName, props);
                 });
+                return parsed;
+            }
+        },
+        {
+            key: "parseProp",
+            value: function parseProp(propName, props) {
+                var prop = props.get(propName);
+                switch(propName){
+                    case "--min-extra-points":
+                    case "--max-extra-points":
+                    case "--min-randomness":
+                    case "--max-randomness":
+                    case "--min-size":
+                    case "--max-size":
+                    case "--num-blobs":
+                    case "--offset-x":
+                    case "--offset-y":
+                    case "--seed":
+                        return parseInt(prop.toString());
+                    case "--min-opacity":
+                    case "--max-opacity":
+                        return parseFloat(prop.toString());
+                    case "--colors":
+                        return prop.toString().split(",").map(function(color) {
+                            return color.trim();
+                        });
+                    default:
+                        return prop.toString().trim();
+                }
             }
         },
         {
             key: "paint",
             value: function paint(ctx, geom, props) {
                 var w = geom.width, h = geom.height;
-                var ref = _slicedToArray(this.parseProps(props), 11), tmp = ref[0], minExtraPoints = tmp === void 0 ? 1 : tmp, tmp1 = ref[1], maxExtraPoints = tmp1 === void 0 ? 1 : tmp1, tmp2 = ref[2], minRandomness = tmp2 === void 0 ? 20 : tmp2, tmp3 = ref[3], maxRandomness = tmp3 === void 0 ? 20 : tmp3, tmp4 = ref[4], minSize = tmp4 === void 0 ? 20 : tmp4, tmp5 = ref[5], maxSize = tmp5 === void 0 ? 400 : tmp5, tmp6 = ref[6], numBlobs = tmp6 === void 0 ? 5 : tmp6, tmp7 = ref[7], colors = tmp7 === void 0 ? [
-                    "#71a7ee",
-                    "#7940c1"
-                ] : tmp7, tmp8 = ref[8], minOpacity = tmp8 === void 0 ? 0.5 : tmp8, tmp9 = ref[9], maxOpacity = tmp9 === void 0 ? 1 : tmp9, tmp10 = ref[10], seed = tmp10 === void 0 ? 123 : tmp10;
+                var defaultProps = {
+                    minExtraPoints: 1,
+                    maxExtraPoints: 1,
+                    minRandomness: 20,
+                    maxRandomness: 20,
+                    minSize: 20,
+                    maxSize: 400,
+                    numBlobs: 5,
+                    colors: [
+                        "#71a7ee",
+                        "#7940c1"
+                    ],
+                    minOpacity: 0.5,
+                    maxOpacity: 1,
+                    offsetX: 0,
+                    offsetY: 0,
+                    seed: 123
+                };
+                var ref = _objectSpread({
+                }, defaultProps, this.parseProps(props)), minExtraPoints = ref.minExtraPoints, maxExtraPoints = ref.maxExtraPoints, minRandomness = ref.minRandomness, maxRandomness = ref.maxRandomness, minSize = ref.minSize, maxSize = ref.maxSize, numBlobs = ref.numBlobs, offsetX = ref.offsetX, offsetY = ref.offsetY, colors = ref.colors, minOpacity = ref.minOpacity, maxOpacity = ref.maxOpacity, seed = ref.seed;
                 this.getRandom = mulberry32(seed);
                 ctx.clearRect(0, 0, w, h);
                 for(var i = 0, max = numBlobs; i < max; i++){
@@ -1707,15 +1715,11 @@ var BlobsPainter1 = /*#__PURE__*/ function() {
                         randomness: this.rand(minRandomness, maxRandomness),
                         size: this.rand(minSize, maxSize)
                     }, {
-                        offsetX: this.rand(0, w),
-                        offsetY: this.rand(0, h)
+                        offsetX: this.rand(0 + offsetX, w),
+                        offsetY: this.rand(0 + offsetY, h)
                     });
                     var color = (ref1 = parse(colors[this.rand(0, colors.length - 1)])) === null || ref1 === void 0 ? void 0 : ref1.rgba;
-                    if (color) {
-                        console.log(minOpacity * 100, maxOpacity * 100);
-                        ctx.fillStyle = "rgba(".concat(color[0], ", ").concat(color[1], ", ").concat(color[2], ", ").concat(this.rand(minOpacity * 100, maxOpacity * 100) / 100, ")");
-                    }
-                    console.log(ctx.fillStyle);
+                    if (color) ctx.fillStyle = "rgba(".concat(color[0], ", ").concat(color[1], ", ").concat(color[2], ", ").concat(this.rand(minOpacity * 100, maxOpacity * 100) / 100, ")");
                     ctx.fill(path);
                 }
             }
@@ -1741,6 +1745,8 @@ var BlobsPainter1 = /*#__PURE__*/ function() {
                     "--colors",
                     "--min-opacity",
                     "--max-opacity",
+                    "--offset-x",
+                    "--offset-y",
                     "--seed", 
                 ];
             }

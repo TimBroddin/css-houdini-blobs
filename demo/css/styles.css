@@ -1,12 +1,4 @@
-:root {
-    --size: 20em;
-}
 
-@media (min-width: 40em) {
-    :root {
-        --size: 40em;
-    }
-}
 
 * {
     box-sizing: content-box;
@@ -20,35 +12,30 @@ body {
 }
 
 body {
-    background-color: white;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    font-family: sans-serif;
+  
+    font-family: Helvetica;
     justify-content: center;
+    height: 100vh;
 }
 
-.css-houdini {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+
+#content {
+    max-width: 800px;
+    margin: 0 auto;
 }
 
-.blobs {
-    background-image: paint(blobs);
+.css-houdini-blobs {
+    border: 3px solid black;
+    border-radius: 10px;
+    width: 100%;
+    height: 300px;
+    background: paint(blobs);
 }
 
-#modal {
+.github {
+    margin-bottom: 10px;
+}
 
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1;
-    border-radius: 2rem;
-    backdrop-filter: blur(2px);
-    padding: 2rem;
-    color: white;
+.github a {
+    color: #000;
 }
