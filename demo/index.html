@@ -24,6 +24,10 @@
       <code> </code>
 
       <div class="css-houdini-blobs"></div>
+      <p>
+        offsetX, offsetY & numBlobs are animated thanks to
+        <a href="https://web.dev/at-property/">CSS custom properties.</a>
+      </p>
     </div>
     <script>
       (async function () {
@@ -75,25 +79,25 @@
           document.querySelector("code").innerHTML = `
             <pre>
               <code>
-                &lt;style&gt;
-                .css-houdini-blobs {
-                  --min-extra-points: ${config.minExtraPoints};
-                  --max-extra-points: ${config.maxExtraPoints};
-                  --min-randomness: ${config.minRandomness};
-                  --max-randomness: ${config.maxRandomness};
-                  --min-size: ${config.minSize};
-                  --max-size: ${config.maxSize};
-                  --num-blobs: ${config.numBlobs};
-                  --offset-x: ${config.offsetX};
-                  --offset-y: ${config.offsetY};
+&lt;style&gt;
+.css-houdini-blobs {
+  --min-extra-points: ${config.minExtraPoints};
+  --max-extra-points: ${config.maxExtraPoints};
+  --min-randomness: ${config.minRandomness};
+  --max-randomness: ${config.maxRandomness};
+  --min-size: ${config.minSize};
+  --max-size: ${config.maxSize};
+  --num-blobs: ${config.numBlobs};
+  --offset-x: ${config.offsetX};
+  --offset-y: ${config.offsetY};
 
-                  --seed: ${config.seed};
-                  --colors: ${config.color1}, ${config.color2}, ${config.color3};
-                  --min-opacity: ${config.minOpacity};
-                  --max-opacity: ${config.maxOpacity};
-                  background: paint(blobs);
-                }
-                &lt;/style&gt;
+  --seed: ${config.seed};
+  --colors: ${config.color1}, ${config.color2}, ${config.color3};
+  --min-opacity: ${config.minOpacity};
+  --max-opacity: ${config.maxOpacity};
+  background: paint(blobs);
+}
+&lt;/style&gt;
               </code>
             </pre>`;
         };

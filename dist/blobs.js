@@ -43,6 +43,13 @@ function _defineProperty(obj, key, value) {
     }
     return obj;
 }
+function _instanceof(left, right) {
+    if (right != null && typeof Symbol !== "undefined" && right[Symbol.hasInstance]) {
+        return right[Symbol.hasInstance](left);
+    } else {
+        return left instanceof right;
+    }
+}
 function _objectSpread(target) {
     for(var i = 1; i < arguments.length; i++){
         var source = arguments[i] != null ? arguments[i] : {
@@ -1656,29 +1663,46 @@ var BlobsPainter1 = /*#__PURE__*/ function() {
         {
             key: "parseProp",
             value: function parseProp(propName, props) {
-                var prop = props.get(propName);
-                switch(propName){
-                    case "--min-extra-points":
-                    case "--max-extra-points":
-                    case "--min-randomness":
-                    case "--max-randomness":
-                    case "--min-size":
-                    case "--max-size":
-                    case "--num-blobs":
-                    case "--offset-x":
-                    case "--offset-y":
-                    case "--seed":
-                        return parseInt(prop.toString());
-                    case "--min-opacity":
-                    case "--max-opacity":
-                        return parseFloat(prop.toString());
-                    case "--colors":
-                        return prop.toString().split(",").map(function(color) {
-                            return color.trim();
-                        });
-                    default:
-                        return prop.toString().trim();
+                var prop1 = props.get(propName);
+                // Cater for browsers that don't speak CSS Typed OM and
+                // for browsers that do speak it, but haven't registered the props
+                if (typeof CSSUnparsedValue === "undefined" || _instanceof(prop1, CSSUnparsedValue)) {
+                    if (!prop1.length || prop1 === "") return undefined;
+                    switch(propName){
+                        case "--min-extra-points":
+                        case "--max-extra-points":
+                        case "--min-randomness":
+                        case "--max-randomness":
+                        case "--min-size":
+                        case "--max-size":
+                        case "--num-blobs":
+                        case "--offset-x":
+                        case "--offset-y":
+                        case "--seed":
+                            return parseInt(prop1.toString());
+                        case "--min-opacity":
+                        case "--max-opacity":
+                            return parseFloat(prop1.toString());
+                        case "--colors":
+                            return prop1.toString().split(",").map(function(color) {
+                                return color.trim();
+                            });
+                        default:
+                            return prop1.toString().trim();
+                    }
                 }
+                if (_instanceof(prop1, CSSUnparsedValue) && !prop1.length) return undefined;
+                // Prop is a UnitValue (Number, Percentage, Integer, …)
+                // ~> Return the value
+                if (_instanceof(prop1, CSSUnitValue)) return prop1.value;
+                // Special case: cell colors
+                // We need to get each value using props.getAll();
+                if (propName === "--colors") return props.getAll(propName).map(function(prop) {
+                    return prop.toString().trim();
+                });
+                // All others (such as CSSKeywordValue)
+                //~> Return the string
+                return prop1.toString().trim();
             }
         },
         {

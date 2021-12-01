@@ -1,5 +1,3 @@
-
-
 * {
     box-sizing: content-box;
 }
@@ -12,7 +10,7 @@ body {
 }
 
 body {
-  
+
     font-family: Helvetica;
     justify-content: center;
     height: 100vh;
@@ -30,12 +28,89 @@ body {
     width: 100%;
     height: 300px;
     background: paint(blobs);
+    transition: --offset-x 1s, --offset-y 1s, --num-blobs 1s;
+    margin-bottom: 10px;
+
 }
+
 
 .github {
     margin-bottom: 10px;
 }
 
-.github a {
+ a {
     color: #000;
+}
+
+p {
+    text-align: center;
+}
+
+@supports (background: paint(blobs)) {
+    @property --colors {
+        syntax: "<color>#";
+        initial-value: #71a7ee, #7940c1;
+        inherits: false;
+    }
+
+    @property --min-extra-points {
+        syntax: "<number>";
+        initial-value: 0;
+        inherits: false;
+    }
+
+    @property --max-extra-points {
+        syntax: "<number>";
+        initial-value: 1;
+        inherits: false;
+    }
+
+    @property --min-size {
+        syntax: "<number>";
+        initial-value: 20;
+        inherits: false;
+    }
+
+    @property --max-size {
+        syntax: "<number>";
+        initial-value: 200;
+        inherits: false;
+    }
+
+    @property --num-blobs {
+        syntax: "<number>";
+        initial-value: 20;
+        inherits: false;
+    }
+
+    @property --offset-x {
+        syntax: "<number>";
+        initial-value: 0;
+        inherits: false;
+    }
+
+    @property --offset-y {
+        syntax: "<number>";
+        initial-value: 0;
+        inherits: false;
+    }
+
+    @property --seed {
+        syntax: "<number>";
+        initial-value: 123;
+        inherits: true;
+    }
+
+    @property --min-opacity {
+        syntax: "<number>";
+        initial-value: 0.1;
+        inherits: false;
+    }
+
+    @property --max-opacity {
+        syntax: "<number>";
+        initial-value: 0.5;
+        inherits: false;
+    }
+
 }
