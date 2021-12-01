@@ -64,7 +64,7 @@ To add support for [browsers that don't speak Houdini](https://ishoudinireadyyet
     }
 
     CSS.paintWorklet.addModule(
-      "https://unpkg.com/css-houdini-circles/dist/circles.js"
+      "https://unpkg.com/@timbroddin/css-houdini-blobs/dist/blobs.js"
     );
   })();
 </script>
