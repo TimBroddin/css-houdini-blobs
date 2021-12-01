@@ -1,5 +1,5 @@
 {
-  "name": "css-houdini-blobs",
+  "name": "@timbroddin/css-houdini-blobs",
   "version": "1.0.0",
   "description": "CSS Houdini Background Blobs",
   "source": "src/index.js",

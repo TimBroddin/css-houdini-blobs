@@ -17,7 +17,7 @@ The easiest way to get `css-houdini-blobs` is to use the prebuilt version throug
 You can install the `css-houdini-blobs` locally using NPM.
 
 ```bash
-npm install css-houdini-blobs
+npm install @timbroddin/css-houdini-blobs
 ```
 
 Alternatively you can clone [the `css-houdini-blobs` repo](https://github.com/timbroddin/css-houdini-blobs/) and after manually build the project:
@@ -34,12 +34,12 @@ You'll find the built file in the `./dist` folder.
 
 To include it you must loads the module in the given JavaScript file and add it to the Paint Worklet.
 
-If you want to use the UNPKG hosted version of `css-houdini-blobs`, use `https://unpkg.com/css-houdini-blobs/dist/blobs.js` as the `moduleURL`.
+If you want to use the UNPKG hosted version of `css-houdini-blobs`, use `https://unpkg.com/@timbroddin/css-houdini-blobs/dist/blobs.js` as the `moduleURL`.
 
 ```js
 if ("paintWorklet" in CSS) {
   CSS.paintWorklet.addModule(
-    "https://unpkg.com/css-houdini-blobs/dist/blobs.js"
+    "https://unpkg.com/@timbroddin/css-houdini-blobs/dist/blobs.js"
   );
 }
 ```
