@@ -2,7 +2,7 @@
 
 A CSS Houdini Paint Worklet to draw blobs.
 
-![CSS Houdini Blobs](https://github.comtimbroddin/css-houdini-blobs/blob/main/assets/screenshot.jpg?raw=true)
+![CSS Houdini Blobs](https://github.com/timbroddin/css-houdini-blobs/blob/main/assets/screenshot.jpg?raw=true)
 
 ## Usage
 
