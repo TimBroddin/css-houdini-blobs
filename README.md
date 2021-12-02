@@ -72,7 +72,7 @@ To add support for [browsers that don't speak Houdini](https://ishoudinireadyyet
 
 ### 3. Applying `css-houdini-blobs`
 
-To use Circles Paint Worklet you need to set the `background-image` property to `paint(circles)`
+To use the Paint Worklet you need to set the `background-image` property to `paint(blobs)`
 
 ```css
 .element {
@@ -199,7 +199,7 @@ To properly animate the Custom Properties and to make use of the built-in syntax
 
 ## Demo / Development
 
-You can play with a small demo on over at [https://css-houdini-blobs.vercel.app/L](https://css-houdini-blobs.vercel.app/)
+You can play with a small demo on over at [https://css-houdini-blobs.vercel.app/](https://css-houdini-blobs.vercel.app/)
 
 If you've cloned the repo you can run `npm run demo` to launch the included demo.
 
@@ -207,7 +207,7 @@ If you've cloned the repo you can run `npm run demo` to launch the included demo
 
 Inspired heavily by [css-houdini-circles](https://github.com/bramus/css-houdini-circles) by [@bramus](https://github.com/bramus) & made blobby by [blobs](https://github.com/g-harel/blobs).
 
-Bramus' acknkwledgements:
+Bramus's acknowledgements:
 The structure of this project was borrowed from [The lines PaintWorklet](https://github.com/CSSHoudini/css-houdini/tree/main/src/lines) by [@nucliweb](https://github.com/nucliweb). More inspiration was fetched from [extra.css](https://github.com/una/extra.css/tree/master/lib) by [@una](https://github.com/una/)
 
 ## License
